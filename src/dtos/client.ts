@@ -11,6 +11,7 @@ export const ClientSchema = z.object({
         state: z.string({ required_error: 'Estado é obrigatório' }).min(1, { message: 'Estado é obrigatório' }),
         city: z.string({ required_error: 'Cidade é obrigatório' }).min(1, { message: 'Cidade é obrigatório' }),
         number: z.string({ required_error: 'Número é obrigatório' }).min(1, { message: 'Número é obrigatório' }),
+        street: z.string({ required_error: 'Endereço é obrigatório' }).min(1, { message: 'Endereço é obrigatório' }),
     }),
     photo: z.string().url(),
     createdAt: z.string(),

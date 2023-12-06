@@ -1,5 +1,5 @@
 import { ClientDTO, ClientSchema } from "@/dtos/client";
-import { Button, FormControl, Heading, SimpleGrid } from "@chakra-ui/react";
+import { Button, FormControl, Heading, SimpleGrid, Input as ChakraInput, Box } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Input } from '../../Input'
@@ -9,12 +9,12 @@ import { Select } from "@/components/Select";
 export function RegisterClient (){
 
     const hook = useRegisterClient()
-
+    hook.form.watch()
     return (
         <FormControl>
-            <SimpleGrid spacing={["2","4"]} w="100%">
+            <Heading>Registrar cliente</Heading>
+            <SimpleGrid mt={'10px'} columns={2} spacing={4} w="100%">
 
-                <Heading>Registrar cliente</Heading>
                 <Input 
                     type="text" 
                     label="Nome" 
@@ -50,13 +50,15 @@ export function RegisterClient (){
                 />
 
                 <Select
+                    label="País"
                     {...hook.form.register('adress.country')}
                     name="adress.country"
+                    error={hook.form.formState.errors.adress?.country} 
                     onChange={(e) => {
                         hook.setStatesByCountry(e.target.value)
                         hook.setCountry(e.target.value)
                     }}
-                    placeholder='País'>
+                    placeholder='Selecionar'>
 
                     {hook.countries?.map((country, index) => (
                         <option key={index} value={country.country}>{country.country}</option>
@@ -65,25 +67,36 @@ export function RegisterClient (){
                 </Select>
 
                 <Select
+                    label="Estado"
                     {...hook.form.register('adress.state')}
                     name="adress.state"
+                    error={hook.form.formState.errors.adress?.state}
                     isDisabled={!hook.states.length}
                     onChange={(e) => hook.setCitiesByState(hook.country, e.target.value)}
-                    placeholder='Escolha o estado'>
+                    placeholder='Selecionar'>
                     {hook.states?.map((state) => (
                         <option key={state.state_code} value={state.name}>{state.name}</option>
                     ))}
                 </Select>
 
                 <Select
+                    label="Cidade"
                     {...hook.form.register('adress.city')}
                     name="adress.city"
+                    error={hook.form.formState.errors.adress?.city}
                     isDisabled={!hook.cities.length}
-                    placeholder='Escolha a cidade'>
+                    placeholder='Selecionar'>
                     {hook.cities?.map((city) => (
                         <option key={city} value={city}>{city}</option>
                     ))}
                 </Select>
+
+                <Input 
+                    label="Endereço" 
+                    {...hook.form.register('adress.street')}
+                    name="adress.street" 
+                    error={hook.form.formState.errors.adress?.street} 
+                />
                 
                 <Input 
                     type="number" 
@@ -93,7 +106,7 @@ export function RegisterClient (){
                     error={hook.form.formState.errors.adress?.number} 
                 />
 
-                <Heading size={'md'}>Propriedades</Heading>
+                <Box />
                 
                 <Button
                     onClick={hook.form.handleSubmit(hook.submit)}
@@ -102,7 +115,7 @@ export function RegisterClient (){
                     isLoading={hook.form.formState.isSubmitting}
                 >
                 Enviar
-            </Button>
+                </Button>  
           </SimpleGrid>
         </FormControl>
     )
